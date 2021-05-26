@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -10,7 +11,19 @@ namespace DL444.AzureBlobMd5
     {
         private static async Task Main(string[] args)
         {
-            (string, Task<string>)[] hashTasks = args.Select(x => (x, GetMd5Base64(x))).ToArray();
+            List<string> files = new List<string>(args);
+            foreach (string path in args)
+            {
+                if (Directory.Exists(path))
+                {
+                    files.AddRange(Directory.GetFiles(path));
+                }
+                else
+                {
+                    files.Add(path);
+                }
+            }
+            (string, Task<string>)[] hashTasks = files.Select(x => (x, GetMd5Base64(x))).ToArray();
             foreach ((string path, Task<string> task) in hashTasks)
             {
                 try
