@@ -11,7 +11,7 @@ namespace DL444.AzureBlobMd5
     {
         private static async Task Main(string[] args)
         {
-            List<string> files = new List<string>(args);
+            List<string> files = new List<string>(args.Length);
             foreach (string path in args)
             {
                 if (Directory.Exists(path))
